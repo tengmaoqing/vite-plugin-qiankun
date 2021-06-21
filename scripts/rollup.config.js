@@ -14,17 +14,19 @@ const banner =
   ' */'
 
 const builds = {
-  // 'web-compile': {
-  //   entry: ['src/index.ts', 'src/helper.ts'],
-  //   format: 'cjs',
-  //   external: ['jsdom'],
-  //   banner
-  // },
+  'web-compile': {
+    entry: ['src/index.ts', 'src/helper.ts'],
+    format: 'cjs',
+    external: ['jsdom'],
+    banner,
+    dir: 'dist'
+  },
   'web-esm': {
     entry: ['src/index.ts', 'src/helper.ts'],
     format: 'es',
     external: ['jsdom'],
-    banner
+    banner,
+    dir: 'es'
   }
 }
 
@@ -40,10 +42,11 @@ function genConfig (name) {
     ],
     output: {
       // file: opts.dest,
-      dir: 'dist',
+      dir: opts.dir,
       format: opts.format,
       banner: opts.banner,
-      name: opts.moduleName || pkgname
+      name: opts.moduleName || pkgname,
+      exports: 'auto'
     },
     onwarn: (msg, warn) => {
       if (!/Circular/.test(msg)) {

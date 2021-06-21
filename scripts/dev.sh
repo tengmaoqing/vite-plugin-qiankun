@@ -9,9 +9,10 @@ fi
 
 echo taget: $TargetDir/node_modules/@tencent/vite-plugin-qiankun
 npm run build
-rm -rf $TargetDir/node_modules/@tencent/vite-plugin-qiankun/dist/*
-cp -rf dist/* $TargetDir/node_modules/@tencent/vite-plugin-qiankun/dist/
-cp -rf src/* $TargetDir/node_modules/@tencent/vite-plugin-qiankun/src/
-cp -rf package.json $TargetDir/node_modules/@tencent/vite-plugin-qiankun/package.json
+rm -rf $TargetDir/node_modules/@tencent/vite-plugin-qiankun/*
+# cp -rf dist/* $TargetDir/node_modules/@tencent/vite-plugin-qiankun/dist/
+# cp -rf es/* $TargetDir/node_modules/@tencent/vite-plugin-qiankun/es/
+# cp -rf package.json $TargetDir/node_modules/@tencent/vite-plugin-qiankun/package.json
+cp -rf `ls | grep -v node_modules | xargs` $TargetDir/node_modules/@tencent/vite-plugin-qiankun/
 
 echo "$TargetDir update success..."

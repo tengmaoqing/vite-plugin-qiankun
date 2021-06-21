@@ -2,7 +2,8 @@
   "name": "@tencent/vite-plugin-qiankun",
   "version": "1.0.0",
   "description": "vite for qiankun",
-  "module": "dist/index.js",
+  "module": "es/index.js",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup -c scripts/rollup.config.js",
@@ -17,6 +18,11 @@
     "vite",
     "esm",
     "esModule"
+  ],
+  "files": [
+    "dist",
+    "type",
+    "es"
   ],
   "author": "markteng",
   "license": "MIT",
