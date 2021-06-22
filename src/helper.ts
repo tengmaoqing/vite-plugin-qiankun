@@ -9,13 +9,19 @@ export type QiankunLifeCycle = {
   unmount: (props: QiankunProps) => void | Promise<void>;
 };
 
-export const qiankunWindow: Window = window.proxy || window;
+export type QiankunWindow = {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  __POWERED_BY_QIANKUN__?: boolean;
+  [x: string]: any
+}
+
+export const qiankunWindow: QiankunWindow = window.proxy || window;
 
 export const renderWithQiankun = (qiankunLifeCycle: QiankunLifeCycle) => {
-  if (window.proxy?.__POWERED_BY_QIANKUN__) {
-    window.proxy.vitemount((props: any) => qiankunLifeCycle.mount(props));
-    window.proxy.viteunmount((props: any) => qiankunLifeCycle.unmount(props));
-    window.proxy.vitebootstrap(() => qiankunLifeCycle.bootstrap());
+  if (qiankunWindow?.__POWERED_BY_QIANKUN__) {
+    qiankunWindow.vitemount((props: any) => qiankunLifeCycle.mount(props));
+    qiankunWindow.viteunmount((props: any) => qiankunLifeCycle.unmount(props));
+    qiankunWindow.vitebootstrap(() => qiankunLifeCycle.bootstrap());
   }
 };
 

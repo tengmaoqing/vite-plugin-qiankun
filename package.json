@@ -1,6 +1,6 @@
 {
   "name": "@tencent/vite-plugin-qiankun",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "vite for qiankun",
   "module": "es/index.js",
   "main": "dist/index.js",
@@ -21,7 +21,6 @@
   ],
   "files": [
     "dist",
-    "type",
     "es"
   ],
   "author": "markteng",
