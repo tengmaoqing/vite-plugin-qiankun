@@ -13,6 +13,7 @@ const createQiankunHelper = (qiankunName: string) => `
   const unmount = createDeffer('unmount');
 
   ;(global => {
+    global.qiankunName = '${qiankunName}';
     global['${qiankunName}'] = {
       bootstrap,
       mount,
@@ -20,6 +21,17 @@ const createQiankunHelper = (qiankunName: string) => `
     };
   })(window);
 `;
+
+const createImportFinallyResolve = (qiankunName: string) => {
+  return `
+    const qiankunLifeCycle = window.moudleQiankunAppLifeCycles && window.moudleQiankunAppLifeCycles['${qiankunName}'];
+    if (qiankunLifeCycle) {
+      window.proxy.vitemount((props) => qiankunLifeCycle.mount(props));
+      window.proxy.viteunmount((props) => qiankunLifeCycle.unmount(props));
+      window.proxy.vitebootstrap(() => qiankunLifeCycle.bootstrap());
+    }
+  `
+}
 
 type PluginFn = (qiankunName: string) => PluginOption;
 
@@ -44,7 +56,9 @@ const htmlPlugin: PluginFn = (qiankunName: string) => {
         const moduleSrc = (moduleTag as HTMLScriptElement).src;
         if (isProduction) {
           moduleTag.removeAttribute('src');
-          moduleTag.innerHTML = `import('${moduleSrc}')`;
+          moduleTag.innerHTML = `import('${moduleSrc}').finally(() => {
+            ${createImportFinallyResolve(qiankunName)}
+          })`;
           return;
         }
       });
@@ -53,7 +67,7 @@ const htmlPlugin: PluginFn = (qiankunName: string) => {
       helperScript.innerHTML = createQiankunHelper(qiankunName);
       docEl.body.appendChild(helperScript);
       const output = docEl.documentElement.outerHTML;
-      return output;
+      return `<!DOCTYPE html>${output}`;
     },
   };
 };

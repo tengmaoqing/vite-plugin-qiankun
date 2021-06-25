@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 
 // vite-plugin-qiankun helper
-import { renderWithQiankun } from "../../../dist/helper";
+import { renderWithQiankun } from "../../../es/helper";
 
 function render(props: any) {
   const { container } = props;

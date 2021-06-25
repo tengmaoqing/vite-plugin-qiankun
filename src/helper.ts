@@ -18,10 +18,14 @@ export type QiankunWindow = {
 export const qiankunWindow: QiankunWindow = window.proxy || window;
 
 export const renderWithQiankun = (qiankunLifeCycle: QiankunLifeCycle) => {
+  // 函数只有一次执行机会，需要把生命周期赋值给全局
   if (qiankunWindow?.__POWERED_BY_QIANKUN__) {
-    qiankunWindow.vitemount((props: any) => qiankunLifeCycle.mount(props));
-    qiankunWindow.viteunmount((props: any) => qiankunLifeCycle.unmount(props));
-    qiankunWindow.vitebootstrap(() => qiankunLifeCycle.bootstrap());
+    if (!window.moudleQiankunAppLifeCycles) {
+      window.moudleQiankunAppLifeCycles = {}
+    }
+    if (qiankunWindow.qiankunName) {
+      window.moudleQiankunAppLifeCycles[qiankunWindow.qiankunName] = qiankunLifeCycle;
+    }
   }
 };
 

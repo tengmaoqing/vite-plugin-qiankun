@@ -7,12 +7,12 @@ else
   TargetDir=$1
 fi
 
-echo taget: $TargetDir/node_modules/@tencent/vite-plugin-qiankun
+echo taget: $TargetDir/node_modules/vite-plugin-qiankun
 npm run build
-rm -rf $TargetDir/node_modules/@tencent/vite-plugin-qiankun/*
-# cp -rf dist/* $TargetDir/node_modules/@tencent/vite-plugin-qiankun/dist/
-# cp -rf es/* $TargetDir/node_modules/@tencent/vite-plugin-qiankun/es/
-# cp -rf package.json $TargetDir/node_modules/@tencent/vite-plugin-qiankun/package.json
-cp -rf `ls | grep -v node_modules | xargs` $TargetDir/node_modules/@tencent/vite-plugin-qiankun/
+rm -rf $TargetDir/node_modules/vite-plugin-qiankun/*
+# cp -rf dist/* $TargetDir/node_modules/vite-plugin-qiankun/dist/
+# cp -rf es/* $TargetDir/node_modules/vite-plugin-qiankun/es/
+# cp -rf package.json $TargetDir/node_modules/vite-plugin-qiankun/package.json
+cp -rf `ls | grep -v node_modules | xargs` $TargetDir/node_modules/vite-plugin-qiankun/
 
 echo "$TargetDir update success..."
