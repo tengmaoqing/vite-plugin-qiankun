@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-qiankun",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "vite for qiankun",
   "module": "es/index.js",
   "main": "dist/index.js",
@@ -23,6 +23,7 @@
     "dist",
     "es"
   ],
+  "homepage": "https://github.com/tengmaoqing/vite-plugin-qiankun",
   "author": "markteng",
   "license": "MIT",
   "dependencies": {
