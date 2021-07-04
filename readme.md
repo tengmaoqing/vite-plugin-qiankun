@@ -69,6 +69,7 @@ if (qiankunWindow.__POWERED_BY_QIANKUN__) {
 详细的信息可以参考例子里面的使用方式
  ```
 git clone xx
+npm install
 npm run example:install
 npm run example:start
 ```
