@@ -1,4 +1,4 @@
-import { JSDOM } from 'jsdom';
+import cheerio from 'cheerio';
 import { PluginOption } from 'vite';
 
 const createQiankunHelper = (qiankunName: string) => `
@@ -46,28 +46,26 @@ const htmlPlugin: PluginFn = (qiankunName: string) => {
       devWBase = `http://127.0.0.1:${config.server.port || 3000}${config.base}`;
     },
     transformIndexHtml(html: string) {
-      const dom = new JSDOM(html);
-      const docEl = dom.window.document;
-      const moduleTags = docEl.querySelectorAll('[type=module]');
+      const $ = cheerio.load(html);
+      const moduleTags = $('script[type=module]');
       if (!moduleTags || !moduleTags.length) {
         return;
       }
-      moduleTags.forEach((moduleTag) => {
-        const moduleSrc = (moduleTag as HTMLScriptElement).src;
+      moduleTags.each((i, moduleTag) => {
+        const script$ = $(moduleTag)
+        const moduleSrc = script$.attr('src');
         if (isProduction) {
-          moduleTag.removeAttribute('src');
-          moduleTag.innerHTML = `import('${moduleSrc}').finally(() => {
+          script$.attr('src', '');
+          script$.html(`import('${moduleSrc}').finally(() => {
             ${createImportFinallyResolve(qiankunName)}
-          })`;
+          })`);
           return;
         }
       });
 
-      const helperScript = docEl.createElement('script');
-      helperScript.innerHTML = createQiankunHelper(qiankunName);
-      docEl.body.appendChild(helperScript);
-      const output = docEl.documentElement.outerHTML;
-      return `<!DOCTYPE html>${output}`;
+      $('body').append(`<script>${createQiankunHelper(qiankunName)}</script>`);
+      const output = $.html();
+      return output;
     },
   };
 };

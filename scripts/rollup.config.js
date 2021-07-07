@@ -17,14 +17,14 @@ const builds = {
   'web-compile': {
     entry: ['src/index.ts', 'src/helper.ts'],
     format: 'cjs',
-    external: ['jsdom'],
+    external: ['cheerio'],
     banner,
     dir: 'dist'
   },
   'web-esm': {
     entry: ['src/index.ts', 'src/helper.ts'],
     format: 'es',
-    external: ['jsdom'],
+    external: ['cheerio'],
     banner,
     dir: 'es'
   }

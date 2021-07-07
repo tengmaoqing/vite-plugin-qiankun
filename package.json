@@ -27,7 +27,7 @@
   "author": "markteng",
   "license": "MIT",
   "dependencies": {
-    "jsdom": "^16.6.0",
+    "cheerio": "^1.0.0-rc.10",
     "typescript": "^4.3.5",
     "vite": "^2.3.6"
   },
