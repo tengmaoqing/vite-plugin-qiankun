@@ -55,7 +55,8 @@ const htmlPlugin: PluginFn = (qiankunName: string) => {
         const script$ = $(moduleTag)
         const moduleSrc = script$.attr('src');
         if (isProduction) {
-          script$.attr('src', '');
+          script$.removeAttr('src');
+          script$.removeAttr('type');
           script$.html(`import('${moduleSrc}').finally(() => {
             ${createImportFinallyResolve(qiankunName)}
           })`);

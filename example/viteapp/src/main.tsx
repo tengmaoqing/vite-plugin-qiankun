@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 
 // vite-plugin-qiankun helper
-import { renderWithQiankun } from "../../../es/helper";
+import { renderWithQiankun, qiankunWindow } from "../../../es/helper";
 
 function render(props: any) {
   const { container } = props;
@@ -36,6 +36,6 @@ renderWithQiankun({
   },
 });
 
-if (!window.proxy) {
+if (!qiankunWindow.__POWERED_BY_QIANKUN__) {
   render({});
 }
