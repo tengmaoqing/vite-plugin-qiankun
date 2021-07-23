@@ -24,7 +24,7 @@ export default {
 
 ```typescript
 // main.ts
-import { renderWithQiankun, qiankunWindow } from 'vite-plugin-qiankun/helper';
+import { renderWithQiankun, qiankunWindow } from 'vite-plugin-qiankun/dist/helper';
 
 // some code
 renderWithQiankun({
@@ -54,7 +54,7 @@ if (!qiankunWindow.__POWERED_BY_QIANKUN__) {
 
 因为es模块加载与`qiankun`的实现方式有些冲突，所以使用本插件实现的`qiankun`微应用里面没有运行在js沙盒中。所以在不可避免需要设置window上的属性时，尽量显示的操作js沙盒，否则可能会对其它子应用产生副作用。qiankun沙盒使用方式
 ```typescript
-import { qiankunWindow } from 'vite-plugin-qiankun/helper';
+import { qiankunWindow } from 'vite-plugin-qiankun/dist/helper';
 
 qiankunWindow.customxxx = 'ssss'
 
