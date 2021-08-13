@@ -8,10 +8,13 @@
   "scripts": {
     "build": "rollup -c scripts/rollup.config.js",
     "example:install": "cd example/main && npm install && cd ../viteapp && npm install && cd ../vue && npm install",
-    "example:start": "npm run build && cd example/viteapp && npm run build && cd ../../ && npm-run-all --parallel start:*",
+    "example:start": "npm run build && cd example/viteapp && npm run build && cd ../../ && npm-run-all --parallel start:main start:viteapp start:vue",
+    "example:start-vite-dev": "npm run build && npm-run-all --parallel start:main start:vitedev start:vue",
     "start:main": "cd example/main && npm run start",
     "start:viteapp": "cd example/viteapp && npm run start",
-    "start:vue": "cd example/vue && npm run start"
+    "start:vitedev": "cd example/viteapp && npm run dev",
+    "start:vue": "cd example/vue && npm run start",
+    "vite:test": "npm run build && cd example/viteapp && npm run dev"
   },
   "keywords": [
     "qiankun",
