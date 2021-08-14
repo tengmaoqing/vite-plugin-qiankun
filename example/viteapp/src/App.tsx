@@ -13,7 +13,7 @@ const RouteExample = () => {
       <nav>
         <Link to="/">Home</Link>
         <Divider type="vertical" />
-        <Link to="/about">About</Link>
+        <Link to="/about">About1</Link>
       </nav>
       <Suspense fallback={null}>
         <Switch>

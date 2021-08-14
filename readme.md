@@ -4,6 +4,7 @@
 
 - 保留vite构建es模块的优势
 - 一键配置，不影响已有的vite配置
+- 支持vite开发环境
 
 #### 快速开始
 
@@ -50,7 +51,30 @@ if (!qiankunWindow.__POWERED_BY_QIANKUN__) {
 }
 ```
 
-###### 3、其它使用注意点 `qiankunWindow`
+###### 3、dev下作为子应用调试
+
+> 因为开发环境作为子应用时与热更新插件（可能与其他修改html的插件也会存在冲突）有冲突，所以需要额外的调试配置
+
+```typescript
+// useDevMode 开启时与热更新插件冲突,使用变量切换
+const useDevMode = true
+
+const baseConfig: UserConfig = {
+  plugins: [
+    ...(
+      useDevMode ? [] : [
+        reactRefresh()
+      ]
+    ),
+    qiankun('viteapp', {
+      useDevMode
+    })
+  ],
+}
+```
+上面例子中 `useDevMode = true` 则不使用热更新插件，`useDevMode = false` 则能使用热更新，但无法作为子应用加载。
+
+###### 4、其它使用注意点 `qiankunWindow`
 
 因为es模块加载与`qiankun`的实现方式有些冲突，所以使用本插件实现的`qiankun`微应用里面没有运行在js沙盒中。所以在不可避免需要设置window上的属性时，尽量显示的操作js沙盒，否则可能会对其它子应用产生副作用。qiankun沙盒使用方式
 ```typescript
@@ -71,10 +95,10 @@ if (qiankunWindow.__POWERED_BY_QIANKUN__) {
 git clone xx
 npm install
 npm run example:install
+# 生产环境调试demo
 npm run example:start
+# vite开发环境demo, demo中热更新已经关闭
+npm run example:start-vite-dev
 ```
 
-#### todo 
-
-- 支持vite开发环境
 

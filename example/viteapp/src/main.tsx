@@ -20,14 +20,14 @@ function render(props: any) {
 
 renderWithQiankun({
   mount(props) {
-    console.log("purehtml mount");
+    console.log("viteapp mount");
     render(props);
   },
   bootstrap() {
     console.log("bootstrap");
   },
   unmount(props: any) {
-    console.log("purehtml unmount");
+    console.log("viteapp unmount");
     const { container } = props;
     const mountRoot = container?.querySelector("#root");
     ReactDOM.unmountComponentAtNode(
