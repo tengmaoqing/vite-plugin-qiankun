@@ -1,5 +1,17 @@
 import cheerio, { CheerioAPI, Element } from 'cheerio'
 import { PluginOption } from 'vite'
+import type { ResolvedConfig } from 'vite'
+import MagicString from 'magic-string'
+
+export interface AssetsRule {
+  match: RegExp
+}
+
+export const DefaultRules: AssetsRule[] = [
+  {
+    match: /(?:src=)(?:"|'|`)(.*).(png|jpe?g|svg|ico)(?:"|'|`)/ig
+  }
+]
 
 const createQiankunHelper = (qiankunName: string) => `
   const createDeffer = (hookName) => {
@@ -44,11 +56,46 @@ const createImportFinallyResolve = (qiankunName: string) => {
 
 export type MicroOption = {
   useDevMode: boolean
+  rules?: AssetsRule[]
 }
 type PluginFn = (qiankunName: string, microOption: MicroOption) => PluginOption;
 
 const htmlPlugin: PluginFn = (qiankunName, microOption) => {
   let isProduction: boolean
+
+  const {
+    rules = DefaultRules
+  } = microOption
+
+  let config: ResolvedConfig
+
+  async function transform (code: string, id: string) {
+    const s = new MagicString(code)
+
+    let match
+
+    for (const rule of rules) {
+      rule.match.lastIndex = 0
+      // eslint-disable-next-line no-cond-assign
+      while ((match = rule.match.exec(code))) {
+        const start = code.indexOf(match[1])
+        const end = start + match[1].length
+        const url = match[1]
+        if (!url || !microOption.useDevMode) { continue }
+        const appendBase = `http://127.0.0.1:${config.server.port}/`
+        const emptyUrl = url.startsWith('/') ? url.substring(1) : url
+
+        const newUrl = `${appendBase}${emptyUrl}`
+
+        s.overwrite(start, end, newUrl)
+      }
+    }
+
+    return {
+      code: s.toString(),
+      map: config.build.sourcemap ? s.generateMap({ hires: true }) : null
+    }
+  }
 
   const module2DynamicImport = ($: CheerioAPI, scriptTag: Element) => {
     if (!scriptTag) {
@@ -68,13 +115,15 @@ const htmlPlugin: PluginFn = (qiankunName, microOption) => {
 
   return {
     name: 'qiankun-html-transform',
-    configResolved (config) {
-      isProduction = config.command === 'build' || config.isProduction
+    enforce: 'pre',
+    configResolved (_config) {
+      config = _config
+      isProduction = _config.command === 'build' || _config.isProduction
     },
 
-    configureServer (server) {
+    configureServer (_server) {
       return () => {
-        server.middlewares.use((req, res, next) => {
+        _server.middlewares.use((req, res, next) => {
           if (isProduction || !microOption.useDevMode) {
             next()
             return
@@ -93,25 +142,32 @@ const htmlPlugin: PluginFn = (qiankunName, microOption) => {
         })
       }
     },
-    transformIndexHtml (html: string) {
-      const $ = cheerio.load(html)
-      const moduleTags = $('script[type=module]')
-      if (!moduleTags || !moduleTags.length) {
-        return
-      }
-      const len = moduleTags.length
-      moduleTags.each((i, moduleTag) => {
-        const script$ = module2DynamicImport($, moduleTag)
-        if (len - 1 === i) {
-          script$?.html(`${script$.html()}.finally(() => {
-            ${createImportFinallyResolve(qiankunName)}
-          })`)
+    async transform (code, id) {
+      return await transform(code, id)
+    },
+    transformIndexHtml: {
+      enforce: 'pre',
+      async transform (html: string, ctx) {
+        const _html = (await transform(html, ctx.filename))?.code
+        const $ = cheerio.load(_html)
+        const moduleTags = $('script[type=module]')
+        if (!moduleTags || !moduleTags.length) {
+          return
         }
-      })
+        const len = moduleTags.length
+        moduleTags.each((i, moduleTag) => {
+          const script$ = module2DynamicImport($, moduleTag)
+          if (len - 1 === i) {
+            script$?.html(`${script$.html()}.finally(() => {
+              ${createImportFinallyResolve(qiankunName)}
+            })`)
+          }
+        })
 
-      $('body').append(`<script>${createQiankunHelper(qiankunName)}</script>`)
-      const output = $.html()
-      return output
+        $('body').append(`<script>${createQiankunHelper(qiankunName)}</script>`)
+        const output = $.html()
+        return output
+      }
     }
   }
 }
