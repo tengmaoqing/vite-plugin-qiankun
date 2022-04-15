@@ -1,6 +1,23 @@
 import cheerio, { CheerioAPI, Element } from 'cheerio'
 import { PluginOption } from 'vite'
 
+const appendBase =
+  "(window.proxy ? (window.proxy.__INJECTED_PUBLIC_PATH_BY_QIANKUN__ + '..') : '') + ";
+
+const createImport = (src: string, callback?: string) =>
+  `import(${appendBase}'${src}').then(${callback})`;
+
+const createEntry = (entryScript: string) => `
+let RefreshRuntime;
+${createImport(
+  "/@react-refresh",
+  `(module) => {
+  RefreshRuntime=module.default
+  RefreshRuntime.injectIntoGlobalHook(window)
+  ${entryScript}
+}`
+)}`;
+
 const createQiankunHelper = (qiankunName: string) => `
   const createDeffer = (hookName) => {
     const d = new Promise((resolve, reject) => {
@@ -81,14 +98,18 @@ const htmlPlugin: PluginFn = (qiankunName, microOption = {}) => {
           }
           const end = res.end.bind(res)
           res.end = (...args: any[]) => {
-            let [htmlStr, ...rest] = args
-            if (typeof htmlStr === 'string') {
-              const $ = cheerio.load(htmlStr)
-              module2DynamicImport($, $('script[src=/@vite/client]').get(0))
-              htmlStr = $.html()
+            let [htmlStr, ...rest] = args;
+            if (typeof htmlStr === "string") {
+              const $ = cheerio.load(htmlStr);
+              module2DynamicImport($, $("script[src=/@vite/client]").get(0));
+              const reactRefreshScript = $("script[type=module]");
+              reactRefreshScript.removeAttr("type").empty();
+              const entryScript = $("#entry");
+              entryScript.html(createEntry((entryScript.html() as string)));
+              htmlStr = $.html();
             }
-            end(htmlStr, ...rest)
-          }
+            end(htmlStr, ...rest);
+          };
           next()
         })
       }
@@ -103,7 +124,7 @@ const htmlPlugin: PluginFn = (qiankunName, microOption = {}) => {
       moduleTags.each((i, moduleTag) => {
         const script$ = module2DynamicImport($, moduleTag)
         if (len - 1 === i) {
-          script$?.html(`${script$.html()}.finally(() => {
+          script$?.attr("id", "entry").html(`${script$.html()}.finally(() => {
             ${createImportFinallyResolve(qiankunName)}
           })`)
         }

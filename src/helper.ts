@@ -1,3 +1,8 @@
+// reactRefresh实现热更新
+window.$RefreshReg$ = () => {};
+window.$RefreshSig$ = () => (type) => type;
+window.__vite_plugin_react_preamble_installed__ = true;
+
 export type QiankunProps = {
   container?: HTMLElement;
   [x: string]: any;
