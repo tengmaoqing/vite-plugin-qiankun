@@ -11,6 +11,7 @@ const createQiankunHelper = (qiankunName: string) => `
   const bootstrap = createDeffer('bootstrap');
   const mount = createDeffer('mount');
   const unmount = createDeffer('unmount');
+  const update = createDeffer('update');
 
   ;(global => {
     global.qiankunName = '${qiankunName}';
@@ -18,6 +19,7 @@ const createQiankunHelper = (qiankunName: string) => `
       bootstrap,
       mount,
       unmount,
+      update
     };
   })(window);
 `
@@ -38,6 +40,7 @@ const createImportFinallyResolve = (qiankunName: string) => {
       window.proxy.vitemount((props) => qiankunLifeCycle.mount(props));
       window.proxy.viteunmount((props) => qiankunLifeCycle.unmount(props));
       window.proxy.vitebootstrap(() => qiankunLifeCycle.bootstrap());
+      window.proxy.viteupdate((props) => qiankunLifeCycle.update(props));
     }
   `
 }

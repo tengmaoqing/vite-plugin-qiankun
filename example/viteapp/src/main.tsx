@@ -34,6 +34,10 @@ renderWithQiankun({
       mountRoot || document.querySelector("#root")
     );
   },
+  update(props: any) {
+    console.log("viteapp update");
+    console.log(props)
+  },
 });
 
 if (!qiankunWindow.__POWERED_BY_QIANKUN__) {

@@ -7,6 +7,7 @@ export type QiankunLifeCycle = {
   bootstrap: () => void | Promise<void>;
   mount: (props: QiankunProps) => void | Promise<void>;
   unmount: (props: QiankunProps) => void | Promise<void>;
+  update: (props: QiankunProps) => void | Promise<void>;
 };
 
 export type QiankunWindow = {
