@@ -1,4 +1,4 @@
-export type QiankunProps = {
+export interface QiankunProps {
   container?: HTMLElement;
   [x: string]: any;
 };
@@ -10,7 +10,7 @@ export type QiankunLifeCycle = {
   update: (props: QiankunProps) => void | Promise<void>;
 };
 
-export type QiankunWindow = {
+export interface QiankunWindow {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __POWERED_BY_QIANKUN__?: boolean;
   [x: string]: any
