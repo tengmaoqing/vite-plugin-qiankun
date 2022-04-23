@@ -16,7 +16,7 @@ export interface QiankunWindow {
   [x: string]: any
 }
 
-export const qiankunWindow: QiankunWindow = window.proxy || window
+export const qiankunWindow: QiankunWindow = typeof window !== 'undefined' ? (window.proxy || window) : {}
 
 export const renderWithQiankun = (qiankunLifeCycle: QiankunLifeCycle) => {
   // 函数只有一次执行机会，需要把生命周期赋值给全局
