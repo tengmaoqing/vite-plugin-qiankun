@@ -7,12 +7,14 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup -c scripts/rollup.config.js",
-    "example:install": "cd example/main && npm install && cd ../viteapp && npm install && cd ../vue && npm install",
-    "example:start": "npm run build && cd example/viteapp && npm run build && cd ../../ && npm-run-all --parallel start:main start:viteapp start:vue",
-    "example:start-vite-dev": "npm run build && npm-run-all --parallel start:main start:vitedev start:vue",
+    "example:install": "cd example/main && npm install && cd ../viteapp && npm install && cd ../vue && npm install && cd ../react18 && npm install && cd ../vue3sub && npm install",
+    "example:start": "npm run build && cd example/viteapp && npm run build && cd ../../ && npm-run-all --parallel start:main start:viteapp start:vue start:react18dev start:vue3sub",
+    "example:start-vite-dev": "npm run build && npm-run-all --parallel start:main start:vitedev start:vue start:react18dev start:vue3sub",
     "start:main": "cd example/main && npm run start",
     "start:viteapp": "cd example/viteapp && npm run start",
     "start:vitedev": "cd example/viteapp && npm run dev",
+    "start:react18dev": "cd example/react18 && npm run dev",
+    "start:vue3sub": "cd example/vue3sub && npm run dev",
     "start:vue": "cd example/vue && npm run start",
     "vite:test": "npm run build && cd example/viteapp && npm run dev"
   },
@@ -42,7 +44,10 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "npm-run-all": "^4.1.5",
-    "rollup-plugin-typescript2": "^0.30.0"
+    "rollup": "^2.73.0",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "typescript": "^4.6.4",
+    "vite": "^2.9.9"
   },
   "peerDependencies": {
     "typescript": ">=4",

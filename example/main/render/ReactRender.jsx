@@ -9,17 +9,19 @@ function Render(props) {
   const { loading } = props;
 
   const containerRef = useRef(null)
-
+  
   useEffect(() => {
-    const app = loadMicroApp({
-      name: 'viteapp',
-      entry: 'http://127.0.0.1:7106',
-      container: containerRef.current,
-      props: { brand: 'qiankun' },
-    });
-
     setTimeout(() => {
-      app.update({testprops: 123})
+      const app = loadMicroApp({
+        name: 'viteapp',
+        entry: 'http://127.0.0.1:7106',
+        container: containerRef.current,
+        props: { brand: 'qiankun' },
+      });
+  
+      setTimeout(() => {
+        app.update({testprops: 123})
+      }, 3000)
     }, 3000)
   }, [])
 
@@ -27,7 +29,9 @@ function Render(props) {
     <>
       {loading && <h4 className="subapp-loading">Loading...</h4>}
       <div id="subapp-viewport" />
-      <div ref={containerRef} />
+      <hr />
+      <h4>动态viteapp 传输props</h4>
+      <div className="viteapp-props" ref={containerRef} />
     </>
   );
 }
