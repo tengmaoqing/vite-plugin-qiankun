@@ -48,7 +48,7 @@ const createImportFinallyResolve = (qiankunName: string) => {
 export type MicroOption = {
   useDevMode?: boolean
 }
-type PluginFn = (qiankunName: string, microOption: MicroOption) => PluginOption;
+type PluginFn = (qiankunName: string, microOption?: MicroOption) => PluginOption;
 
 const htmlPlugin: PluginFn = (qiankunName, microOption = {}) => {
   let isProduction: boolean
