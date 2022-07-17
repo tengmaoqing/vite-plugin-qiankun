@@ -52,6 +52,7 @@ type PluginFn = (qiankunName: string, microOption?: MicroOption) => PluginOption
 
 const htmlPlugin: PluginFn = (qiankunName, microOption = {}) => {
   let isProduction: boolean
+  let base = ''
 
   const module2DynamicImport = ($: CheerioAPI, scriptTag: Element) => {
     if (!scriptTag) {
@@ -73,6 +74,7 @@ const htmlPlugin: PluginFn = (qiankunName, microOption = {}) => {
     name: 'qiankun-html-transform',
     configResolved (config) {
       isProduction = config.command === 'build' || config.isProduction
+      base = config.base
     },
 
     configureServer (server) {
@@ -87,7 +89,7 @@ const htmlPlugin: PluginFn = (qiankunName, microOption = {}) => {
             let [htmlStr, ...rest] = args
             if (typeof htmlStr === 'string') {
               const $ = cheerio.load(htmlStr)
-              module2DynamicImport($, $('script[src=/@vite/client]').get(0))
+              module2DynamicImport($, $(`script[src=${base}@vite/client]`).get(0))
               htmlStr = $.html()
             }
             end(htmlStr, ...rest)
