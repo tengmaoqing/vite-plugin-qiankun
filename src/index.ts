@@ -98,7 +98,7 @@ const htmlPlugin: PluginFn = (qiankunName, microOption = {}) => {
     },
     transformIndexHtml (html: string) {
       const $ = cheerio.load(html)
-      const moduleTags = $('script[type=module]')
+      const moduleTags = $('body script[type=module], head script[crossorigin=""]')
       if (!moduleTags || !moduleTags.length) {
         return
       }
