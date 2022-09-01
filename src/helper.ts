@@ -1,13 +1,14 @@
-export interface QiankunProps {
+type QiankunAdditionalProps = Record<string, any>
+
+export type QiankunProps<T = QiankunAdditionalProps> = {
   container?: HTMLElement;
-  [x: string]: any;
-};
+} & T;
 
 export type QiankunLifeCycle = {
   bootstrap: () => void | Promise<void>;
-  mount: (props: QiankunProps) => void | Promise<void>;
-  unmount: (props: QiankunProps) => void | Promise<void>;
-  update: (props: QiankunProps) => void | Promise<void>;
+  mount: <T = QiankunAdditionalProps>(props: QiankunProps<T>) => void | Promise<void>;
+  unmount: <T = QiankunAdditionalProps>(props: QiankunProps<T>) => void | Promise<void>;
+  update: <T = QiankunAdditionalProps>(props: QiankunProps<T>) => void | Promise<void>;
 };
 
 export interface QiankunWindow {
