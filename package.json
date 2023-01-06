@@ -1,5 +1,5 @@
 {
-  "name": "vite-plugin-qiankun",
+  "name": "@fyzhu/vite-plugin-qiankun",
   "version": "1.0.15",
   "description": "vite for qiankun",
   "module": "es/index.js",
